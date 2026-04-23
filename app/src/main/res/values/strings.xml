@@ -4,5 +4,17 @@
     <string name="login_subtitle">Tournament organizer</string>
     <string name="login_authorize">Authorize</string>
     <string name="games_title">Games</string>
-    <string name="games_empty_hint">No games yet. You will create them in the next step.</string>
+    <string name="games_empty_hint">No games yet. Tap + to create a tournament.</string>
+    <string name="games_fab_new_game">New game</string>
+    <string name="tournament_untitled">Untitled tournament</string>
+    <string name="tournament_status_draft">Draft</string>
+    <string name="tournament_status_active">Active</string>
+    <string name="tournament_status_finished">Finished</string>
+    <string name="create_game_title">New game</string>
+    <string name="create_game_placeholder_body">Player names and Americano setup will be added in the next step.</string>
+    <string name="active_game_title">Active game</string>
+    <string name="active_game_placeholder_body">Tournament id: %1$d. Match grid will be added in a later step.</string>
+    <string name="summary_title">Results</string>
+    <string name="summary_placeholder_body">Tournament id: %1$d. Standings will be added in a later step.</string>
+    <string name="content_description_navigate_up">Navigate up</string>
 </resources>

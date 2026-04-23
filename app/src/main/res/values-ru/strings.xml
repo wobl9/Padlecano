@@ -4,5 +4,17 @@
     <string name="login_subtitle">Организация турниров</string>
     <string name="login_authorize">Авторизоваться</string>
     <string name="games_title">Игры</string>
-    <string name="games_empty_hint">Пока нет игр. Создание — на следующем шаге.</string>
+    <string name="games_empty_hint">Пока нет игр. Нажмите +, чтобы создать турнир.</string>
+    <string name="games_fab_new_game">Новая игра</string>
+    <string name="tournament_untitled">Турнир без названия</string>
+    <string name="tournament_status_draft">Черновик</string>
+    <string name="tournament_status_active">Активный</string>
+    <string name="tournament_status_finished">Завершён</string>
+    <string name="create_game_title">Новая игра</string>
+    <string name="create_game_placeholder_body">Имена игроков и настройка Americano будут на следующем шаге.</string>
+    <string name="active_game_title">Активная игра</string>
+    <string name="active_game_placeholder_body">Id турнира: %1$d. Сетка матчей — на следующем шаге.</string>
+    <string name="summary_title">Итоги</string>
+    <string name="summary_placeholder_body">Id турнира: %1$d. Таблица результатов — на следующем шаге.</string>
+    <string name="content_description_navigate_up">Назад</string>
 </resources>
