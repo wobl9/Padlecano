@@ -24,6 +24,10 @@
     <string name="tournament_type_americano">Americano</string>
     <string name="create_game_players_section">Players</string>
     <string name="create_game_players_hint">Add groups of four. Every name must be filled in before you start.</string>
+    <string name="create_game_saved_names_section">Saved names</string>
+    <string name="create_game_saved_names_hint">Tap a chip to fill the first empty player slot. Use × to remove a name from this list.</string>
+    <string name="create_game_save_names_button">Save non-empty names on this screen</string>
+    <string name="create_game_saved_name_no_empty_slot">All slots are filled. Clear a field or add more players.</string>
     <string name="create_game_player_label">Player %1$d</string>
     <string name="create_game_add_four_players">Add four players</string>
     <string name="create_game_remove_four_players">Remove last four players</string>
@@ -70,4 +74,5 @@
     <string name="match_validity_issue_negative_score">Scores cannot be negative.</string>
     <string name="match_validity_issue_combined_exceeds">Combined score exceeds the tournament limit (%1$d).</string>
     <string name="content_description_navigate_up">Navigate up</string>
+    <string name="content_description_remove_saved_name">Remove from saved names</string>
 </resources>

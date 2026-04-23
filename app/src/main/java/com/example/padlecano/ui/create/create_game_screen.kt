@@ -2,17 +2,22 @@ package com.example.padlecano.ui.create
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -22,13 +27,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
@@ -40,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.padlecano.R
 import com.example.padlecano.domain.model.TournamentType
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,18 +60,35 @@ fun CreateGameScreen(
     modifier: Modifier = Modifier,
 ) {
     val uiState: CreateGameUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    val savedNamesHorizontalScroll = rememberScrollState()
+    val context = LocalContext.current
     val playerCount: Int = uiState.playerNames.size
     val playerFocusRequesters: List<FocusRequester> = remember(playerCount) {
         List(size = playerCount) { FocusRequester() }
     }
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = viewModel) {
-        viewModel.navigationEvents.collect { tournamentId: Long ->
-            onTournamentCreated(tournamentId)
+        launch {
+            viewModel.navigationEvents.collect { tournamentId: Long ->
+                onTournamentCreated(tournamentId)
+            }
+        }
+        launch {
+            viewModel.events.collect { event: CreateGameEvent ->
+                when (event) {
+                    CreateGameEvent.NoEmptySlotForSavedName -> {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.create_game_saved_name_no_empty_slot),
+                        )
+                    }
+                }
+            }
         }
     }
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.create_game_title)) },
@@ -131,6 +158,49 @@ fun CreateGameScreen(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            Text(
+                text = stringResource(R.string.create_game_saved_names_section),
+                style = MaterialTheme.typography.titleSmall,
+            )
+            Text(
+                text = stringResource(R.string.create_game_saved_names_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (uiState.savedPlayerNames.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(state = savedNamesHorizontalScroll),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    for (savedName: String in uiState.savedPlayerNames) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            AssistChip(
+                                onClick = { viewModel.applySavedNameToNextEmptySlot(displayName = savedName) },
+                                label = { Text(text = savedName) },
+                            )
+                            IconButton(
+                                onClick = { viewModel.removeSavedPlayerName(displayName = savedName) },
+                                modifier = Modifier.size(40.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = stringResource(R.string.content_description_remove_saved_name),
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            OutlinedButton(
+                onClick = { viewModel.rememberFilledPlayerNamesFromForm() },
+                enabled = uiState.playerNames.any { name: String -> name.isNotBlank() },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(text = stringResource(R.string.create_game_save_names_button))
+            }
             uiState.playerNames.forEachIndexed { index: Int, name: String ->
                 val isLastPlayerField: Boolean = index == uiState.playerNames.lastIndex
                 OutlinedTextField(

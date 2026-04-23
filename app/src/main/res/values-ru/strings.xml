@@ -24,6 +24,10 @@
     <string name="tournament_type_americano">Americano</string>
     <string name="create_game_players_section">Игроки</string>
     <string name="create_game_players_hint">Добавляйте группы по четыре. Перед стартом у каждого должно быть имя.</string>
+    <string name="create_game_saved_names_section">Сохранённые имена</string>
+    <string name="create_game_saved_names_hint">Нажмите на имя — оно подставится в первое пустое поле игрока. Крестик убирает имя из списка.</string>
+    <string name="create_game_save_names_button">Сохранить введённые имена с экрана</string>
+    <string name="create_game_saved_name_no_empty_slot">Все поля заняты. Очистите одно поле или добавьте игроков.</string>
     <string name="create_game_player_label">Игрок %1$d</string>
     <string name="create_game_add_four_players">Добавить четырёх игроков</string>
     <string name="create_game_remove_four_players">Убрать последних четырёх игроков</string>
@@ -70,4 +74,5 @@
     <string name="match_validity_issue_negative_score">Счёт не может быть отрицательным.</string>
     <string name="match_validity_issue_combined_exceeds">Сумма очков превышает лимит турнира (%1$d).</string>
     <string name="content_description_navigate_up">Назад</string>
+    <string name="content_description_remove_saved_name">Удалить из сохранённых</string>
 </resources>
