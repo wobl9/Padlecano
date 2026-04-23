@@ -4,6 +4,7 @@ data class ActiveTournamentState(
     val tournamentId: Long,
     val title: String,
     val players: List<String>,
+    val maxCombinedMatchScore: Int,
     val rounds: List<RoundState>,
 )
 

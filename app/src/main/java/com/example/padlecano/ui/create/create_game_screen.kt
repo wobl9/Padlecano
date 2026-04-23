@@ -93,6 +93,15 @@ fun CreateGameScreen(
                 singleLine = true,
             )
             OutlinedTextField(
+                value = uiState.maxCombinedScoreInput,
+                onValueChange = viewModel::updateMaxCombinedScoreInput,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = stringResource(R.string.create_game_field_max_combined_score)) },
+                supportingText = { Text(text = stringResource(R.string.create_game_field_max_combined_score_hint)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            )
+            OutlinedTextField(
                 value = tournamentTypeLabel(type = uiState.tournamentType),
                 onValueChange = {},
                 modifier = Modifier.fillMaxWidth(),
@@ -172,6 +181,9 @@ private fun validationErrorMessage(error: CreateGameValidationError): String {
         }
         CreateGameValidationError.BLANK_PLAYER_NAME -> {
             stringResource(R.string.create_game_error_blank_name)
+        }
+        CreateGameValidationError.INVALID_MAX_COMBINED_SCORE -> {
+            stringResource(R.string.create_game_error_invalid_max_combined_score)
         }
     }
 }

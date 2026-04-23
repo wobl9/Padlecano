@@ -10,4 +10,6 @@ data class TournamentEntity(
     val createdAtMillis: Long,
     val status: String,
     val tournamentType: String,
+    /** Maximum allowed scoreA + scoreB for a single match in this tournament. */
+    val maxCombinedMatchScore: Int,
 )

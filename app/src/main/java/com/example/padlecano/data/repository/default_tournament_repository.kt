@@ -28,12 +28,17 @@ class DefaultTournamentRepository(
         }
     }
 
-    override suspend fun createAmericanoTournament(title: String, playerDisplayNames: List<String>): Long {
+    override suspend fun createAmericanoTournament(
+        title: String,
+        playerDisplayNames: List<String>,
+        maxCombinedMatchScore: Int,
+    ): Long {
         val tournament = TournamentEntity(
             title = title,
             createdAtMillis = System.currentTimeMillis(),
             status = TournamentStatus.ACTIVE.name,
             tournamentType = TournamentType.AMERICANO.name,
+            maxCombinedMatchScore = maxCombinedMatchScore,
         )
         val players: List<TournamentPlayerEntity> = playerDisplayNames.mapIndexed { index: Int, name: String ->
             TournamentPlayerEntity(tournamentId = 0L, displayName = name, sortOrder = index)
@@ -79,6 +84,7 @@ class DefaultTournamentRepository(
                     tournamentId = tournamentEntity.id,
                     title = tournamentEntity.title,
                     players = players,
+                    maxCombinedMatchScore = tournamentEntity.maxCombinedMatchScore,
                     rounds = roundsWithMatches.map { rwm: RoundWithMatches ->
                         RoundState(
                             roundId = rwm.round.id,
@@ -117,6 +123,10 @@ class DefaultTournamentRepository(
             tournamentId = tournamentId,
             status = TournamentStatus.FINISHED.name,
         )
+    }
+
+    override suspend fun deleteAllTournaments() {
+        tournamentDao.deleteAllTournaments()
     }
 }
 

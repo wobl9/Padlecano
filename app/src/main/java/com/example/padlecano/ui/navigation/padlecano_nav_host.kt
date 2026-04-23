@@ -61,6 +61,9 @@ fun PadlecanoNavHost(
                     onCreateGameClick = {
                         navController.navigate(route = NavigationDestination.CreateGame.route)
                     },
+                    onDeleteAllGamesClick = {
+                        gamesListViewModel.deleteAllTournaments()
+                    },
                     onTournamentClick = { tournament ->
                         when (tournament.status) {
                             TournamentStatus.DRAFT -> {

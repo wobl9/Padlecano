@@ -20,10 +20,12 @@ enum class CreateGameValidationError {
     NEED_AT_LEAST_FOUR_PLAYERS,
     PLAYER_COUNT_NOT_MULTIPLE_OF_FOUR,
     BLANK_PLAYER_NAME,
+    INVALID_MAX_COMBINED_SCORE,
 }
 
 data class CreateGameUiState(
     val title: String = "",
+    val maxCombinedScoreInput: String = "6",
     val playerNames: List<String> = (1..4).map { "" },
     val tournamentType: TournamentType = TournamentType.AMERICANO,
     val validationError: CreateGameValidationError? = null,
@@ -40,6 +42,12 @@ class CreateGameViewModel(
     fun updateTitle(value: String) {
         _uiState.update { current: CreateGameUiState ->
             current.copy(title = value, validationError = null)
+        }
+    }
+    fun updateMaxCombinedScoreInput(value: String) {
+        val filtered: String = value.filter { it.isDigit() }.take(3)
+        _uiState.update { current: CreateGameUiState ->
+            current.copy(maxCombinedScoreInput = filtered, validationError = null)
         }
     }
     fun updatePlayerName(index: Int, value: String) {
@@ -82,9 +90,11 @@ class CreateGameViewModel(
             try {
                 val snapshot: CreateGameUiState = _uiState.value
                 val trimmedNames: List<String> = snapshot.playerNames.map { name: String -> name.trim() }
+                val maxCombined: Int = checkNotNull(snapshot.maxCombinedScoreInput.toIntOrNull())
                 val tournamentId: Long = tournamentRepository.createAmericanoTournament(
                     title = snapshot.title.trim(),
                     playerDisplayNames = trimmedNames,
+                    maxCombinedMatchScore = maxCombined,
                 )
                 _uiState.update { it.copy(isSaving = false) }
                 navigationChannel.send(element = tournamentId)
@@ -104,9 +114,19 @@ class CreateGameViewModel(
         if (hasBlank) {
             return CreateGameValidationError.BLANK_PLAYER_NAME
         }
+        val maxCombined: Int? = state.maxCombinedScoreInput.toIntOrNull()
+        if (maxCombined == null || state.maxCombinedScoreInput.isBlank()) {
+            return CreateGameValidationError.INVALID_MAX_COMBINED_SCORE
+        }
+        if (maxCombined < MIN_MAX_COMBINED_SCORE || maxCombined > MAX_MAX_COMBINED_SCORE) {
+            return CreateGameValidationError.INVALID_MAX_COMBINED_SCORE
+        }
         return null
     }
+
     companion object {
+        private const val MIN_MAX_COMBINED_SCORE: Int = 1
+        private const val MAX_MAX_COMBINED_SCORE: Int = 999
         fun createFactory(): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {

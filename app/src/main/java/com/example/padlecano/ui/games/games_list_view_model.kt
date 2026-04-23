@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 data class GamesListUiState(
     val tournaments: List<TournamentSummary> = emptyList(),
@@ -28,6 +29,11 @@ class GamesListViewModel(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000L),
             initialValue = GamesListUiState(),
         )
+    fun deleteAllTournaments() {
+        viewModelScope.launch {
+            tournamentRepository.deleteAllTournaments()
+        }
+    }
     companion object {
         fun createFactory(): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {

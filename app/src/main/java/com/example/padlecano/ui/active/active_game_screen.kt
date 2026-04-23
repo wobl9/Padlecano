@@ -1,5 +1,7 @@
 package com.example.padlecano.ui.active
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +34,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -86,7 +89,10 @@ fun ActiveGameScreen(
                 }
                 Button(
                     onClick = { viewModel.confirmRound() },
-                    enabled = !uiState.isSaving && uiState.courts.isNotEmpty(),
+                    enabled = !uiState.isSaving &&
+                        uiState.courts.isNotEmpty() &&
+                        uiState.allScoreFieldsFilled &&
+                        !uiState.combinedScoreExceedsLimit,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 12.dp),
@@ -132,6 +138,7 @@ fun ActiveGameScreen(
                         RoundProgressHeader(
                             currentRound = uiState.currentRoundNumber,
                             totalRounds = uiState.totalRounds,
+                            maxCombinedMatchScore = uiState.maxCombinedMatchScore,
                         )
                     }
                     items(
@@ -146,10 +153,22 @@ fun ActiveGameScreen(
                             onScoreBChange = { value: String -> viewModel.updateScoreB(court.matchId, value) },
                         )
                     }
-                    if (uiState.showScoreError) {
-                        item(key = "error") {
+                    if (uiState.combinedScoreExceedsLimit) {
+                        item(key = "error_exceeds") {
                             Text(
-                                text = stringResource(R.string.active_game_score_error),
+                                text = stringResource(
+                                    R.string.active_game_error_exceeds_play_to_total,
+                                    uiState.maxCombinedMatchScore,
+                                ),
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(horizontal = 4.dp),
+                            )
+                        }
+                    } else if (uiState.showMissingScoresMessage) {
+                        item(key = "error_missing") {
+                            Text(
+                                text = stringResource(R.string.active_game_error_missing_scores),
                                 color = MaterialTheme.colorScheme.error,
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.padding(horizontal = 4.dp),
@@ -167,12 +186,18 @@ fun ActiveGameScreen(
 private fun RoundProgressHeader(
     currentRound: Int,
     totalRounds: Int,
+    maxCombinedMatchScore: Int,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
             text = stringResource(R.string.active_game_round_progress, currentRound, totalRounds),
             style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = stringResource(R.string.active_game_play_to_total_hint, maxCombinedMatchScore),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         LinearProgressIndicator(
             progress = { currentRound.toFloat() / totalRounds.toFloat() },
@@ -241,20 +266,27 @@ private fun ScoreField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    val isFocused: Boolean by interactionSource.collectIsFocusedAsState()
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.width(64.dp),
+        interactionSource = interactionSource,
         textStyle = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         singleLine = true,
-        placeholder = {
-            Text(
-                text = "0",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-            )
+        placeholder = if (value.isEmpty() && !isFocused) {
+            {
+                Text(
+                    text = "0",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
+        } else {
+            null
         },
     )
 }
