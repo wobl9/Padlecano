@@ -41,7 +41,7 @@ import com.example.padlecano.domain.model.SummarySortMode
 fun SummaryScreen(
     viewModel: SummaryViewModel,
     onNavigateUp: () -> Unit,
-    onNavigateToScheduleVerification: () -> Unit,
+    onNavigateToMatchValidity: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uiState: SummaryUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -96,7 +96,7 @@ fun SummaryScreen(
                         .padding(horizontal = 16.dp),
                     uiState = uiState,
                     onSortModeChange = viewModel::setSortMode,
-                    onNavigateToScheduleVerification = onNavigateToScheduleVerification,
+                    onNavigateToMatchValidity = onNavigateToMatchValidity,
                 )
             }
         }
@@ -107,7 +107,7 @@ fun SummaryScreen(
 private fun SummaryContent(
     uiState: SummaryUiState,
     onSortModeChange: (SummarySortMode) -> Unit,
-    onNavigateToScheduleVerification: () -> Unit,
+    onNavigateToMatchValidity: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -139,7 +139,7 @@ private fun SummaryContent(
         StandingsTable(rows = uiState.rows)
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedButton(
-            onClick = onNavigateToScheduleVerification,
+            onClick = onNavigateToMatchValidity,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Icon(
@@ -147,7 +147,7 @@ private fun SummaryContent(
                 contentDescription = null,
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = stringResource(R.string.summary_verify_schedule))
+            Text(text = stringResource(R.string.summary_open_match_validity))
         }
     }
 }
@@ -161,7 +161,10 @@ private fun StandingsTable(rows: List<PlayerStandingRow>) {
             StandingsHeaderRow()
             HorizontalDivider()
         }
-        itemsIndexed(rows) { index: Int, row: PlayerStandingRow ->
+        itemsIndexed(
+            items = rows,
+            key = { _: Int, row: PlayerStandingRow -> row.playerIndex },
+        ) { index: Int, row: PlayerStandingRow ->
             StandingsDataRow(rank = index + 1, row = row)
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         }

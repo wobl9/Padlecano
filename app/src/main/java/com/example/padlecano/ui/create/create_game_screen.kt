@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,8 +27,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -44,6 +50,11 @@ fun CreateGameScreen(
     modifier: Modifier = Modifier,
 ) {
     val uiState: CreateGameUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val playerCount: Int = uiState.playerNames.size
+    val playerFocusRequesters: List<FocusRequester> = remember(playerCount) {
+        List(size = playerCount) { FocusRequester() }
+    }
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = viewModel) {
         viewModel.navigationEvents.collect { tournamentId: Long ->
             onTournamentCreated(tournamentId)
@@ -121,10 +132,13 @@ fun CreateGameScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             uiState.playerNames.forEachIndexed { index: Int, name: String ->
+                val isLastPlayerField: Boolean = index == uiState.playerNames.lastIndex
                 OutlinedTextField(
                     value = name,
                     onValueChange = { next: String -> viewModel.updatePlayerName(index = index, value = next) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester = playerFocusRequesters[index]),
                     label = {
                         Text(text = stringResource(R.string.create_game_player_label, index + 1))
                     },
@@ -132,6 +146,16 @@ fun CreateGameScreen(
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Words,
                         keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (!isLastPlayerField) {
+                                playerFocusRequesters[index + 1].requestFocus()
+                            } else {
+                                focusManager.clearFocus()
+                            }
+                        },
                     ),
                 )
             }

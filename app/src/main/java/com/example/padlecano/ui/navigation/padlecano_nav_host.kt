@@ -22,8 +22,8 @@ import com.example.padlecano.ui.create.CreateGameViewModel
 import com.example.padlecano.ui.games.GamesListScreen
 import com.example.padlecano.ui.games.GamesListViewModel
 import com.example.padlecano.ui.login.LoginScreen
-import com.example.padlecano.ui.schedule_verification.ScheduleVerificationScreen
-import com.example.padlecano.ui.schedule_verification.ScheduleVerificationViewModel
+import com.example.padlecano.ui.match_validity.MatchValidityScreen
+import com.example.padlecano.ui.match_validity.MatchValidityViewModel
 import com.example.padlecano.ui.summary.SummaryScreen
 import com.example.padlecano.ui.summary.SummaryViewModel
 import kotlinx.coroutines.launch
@@ -131,23 +131,23 @@ fun PadlecanoNavHost(
                 SummaryScreen(
                     viewModel = summaryViewModel,
                     onNavigateUp = { navController.navigateUp() },
-                    onNavigateToScheduleVerification = {
-                        navController.navigate(route = scheduleVerificationRoute(tournamentId = tournamentId))
+                    onNavigateToMatchValidity = {
+                        navController.navigate(route = matchValidityRoute(tournamentId = tournamentId))
                     },
                 )
             }
             composable(
-                route = NavigationDestination.ScheduleVerification.route,
+                route = NavigationDestination.MatchValidity.route,
                 arguments = listOf(
                     navArgument(name = "tournamentId") { type = NavType.LongType },
                 ),
             ) { backStackEntry ->
                 val tournamentId: Long = checkNotNull(backStackEntry.arguments).getLong("tournamentId")
-                val verificationViewModel: ScheduleVerificationViewModel = viewModel(
-                    factory = ScheduleVerificationViewModel.createFactory(tournamentId = tournamentId),
+                val matchValidityViewModel: MatchValidityViewModel = viewModel(
+                    factory = MatchValidityViewModel.createFactory(tournamentId = tournamentId),
                 )
-                ScheduleVerificationScreen(
-                    viewModel = verificationViewModel,
+                MatchValidityScreen(
+                    viewModel = matchValidityViewModel,
                     onNavigateUp = { navController.navigateUp() },
                 )
             }

@@ -9,7 +9,7 @@ sealed class NavigationDestination(val route: String) {
     data object CreateGame : NavigationDestination("create_game")
     data object ActiveGame : NavigationDestination("active_game/{tournamentId}")
     data object Summary : NavigationDestination("summary/{tournamentId}")
-    data object ScheduleVerification : NavigationDestination("schedule_verification/{tournamentId}")
+    data object MatchValidity : NavigationDestination("match_validity/{tournamentId}")
 }
 
 fun activeGameRoute(tournamentId: Long): String {
@@ -20,6 +20,6 @@ fun summaryRoute(tournamentId: Long): String {
     return "summary/$tournamentId"
 }
 
-fun scheduleVerificationRoute(tournamentId: Long): String {
-    return "schedule_verification/$tournamentId"
+fun matchValidityRoute(tournamentId: Long): String {
+    return "match_validity/$tournamentId"
 }

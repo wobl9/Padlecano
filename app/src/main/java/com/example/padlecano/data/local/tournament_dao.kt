@@ -37,6 +37,10 @@ interface TournamentDao {
     @Query("SELECT * FROM rounds WHERE tournamentId = :tournamentId ORDER BY roundNumber ASC")
     fun observeRoundsWithMatches(tournamentId: Long): Flow<List<RoundWithMatches>>
 
+    @Transaction
+    @Query("SELECT * FROM rounds WHERE tournamentId = :tournamentId ORDER BY roundNumber ASC")
+    suspend fun getRoundsWithMatchesOnce(tournamentId: Long): List<RoundWithMatches>
+
     @Query("UPDATE matches SET scoreA = :scoreA, scoreB = :scoreB, isScoreSet = 1 WHERE id = :matchId")
     suspend fun updateMatchScore(matchId: Long, scoreA: Int, scoreB: Int)
 

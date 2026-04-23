@@ -10,12 +10,16 @@ import com.example.padlecano.domain.model.ActiveTournamentState
 import com.example.padlecano.domain.model.MatchScoreUpdate
 import com.example.padlecano.domain.model.MatchState
 import com.example.padlecano.domain.model.RoundState
+import com.example.padlecano.domain.model.MatchValidityAudit
+import com.example.padlecano.domain.model.RawMatchForAudit
+import com.example.padlecano.domain.model.RawRoundForAudit
 import com.example.padlecano.domain.model.TournamentMatchRecord
 import com.example.padlecano.domain.model.TournamentResultsPayload
 import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.domain.model.TournamentSummary
 import com.example.padlecano.domain.model.TournamentType
 import com.example.padlecano.domain.usecase.AmericanoScheduleGenerator
+import com.example.padlecano.domain.usecase.MatchValidityAuditBuilder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -152,6 +156,37 @@ class DefaultTournamentRepository(
             tournamentTitle = entity.title,
             playerDisplayNames = playerNames,
             matches = records,
+        )
+    }
+
+    override suspend fun loadMatchValidityAudit(tournamentId: Long): MatchValidityAudit? {
+        val entity: TournamentEntity = tournamentDao.getTournamentById(tournamentId) ?: return null
+        val playerNames: List<String> = tournamentDao.getPlayersByTournamentId(tournamentId)
+            .sortedBy { it.sortOrder }
+            .map { it.displayName }
+        val roundsData: List<RawRoundForAudit> = tournamentDao.getRoundsWithMatchesOnce(tournamentId)
+            .map { rwm: RoundWithMatches ->
+                RawRoundForAudit(
+                    roundNumber = rwm.round.roundNumber,
+                    matches = rwm.matches.sortedBy { it.id }.map { match: MatchEntity ->
+                        RawMatchForAudit(
+                            matchId = match.id,
+                            playerA1Index = match.playerA1Index,
+                            playerA2Index = match.playerA2Index,
+                            playerB1Index = match.playerB1Index,
+                            playerB2Index = match.playerB2Index,
+                            scoreA = match.scoreA,
+                            scoreB = match.scoreB,
+                            isScoreSet = match.isScoreSet,
+                        )
+                    },
+                )
+            }
+        return MatchValidityAuditBuilder.build(
+            tournamentTitle = entity.title,
+            maxCombinedMatchScore = entity.maxCombinedMatchScore,
+            playerDisplayNames = playerNames,
+            rounds = roundsData,
         )
     }
 }

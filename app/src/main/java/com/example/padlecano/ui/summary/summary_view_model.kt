@@ -113,8 +113,8 @@ private fun sortStandings(rows: List<PlayerStandingRow>, mode: SummarySortMode):
         )
         SummarySortMode.MATCHES_DESC -> rows.sortedWith(
             compareByDescending<PlayerStandingRow> { it.matchesPlayed }
-                .thenByDescending { it.totalPoints }
                 .thenByDescending { it.wins }
+                .thenByDescending { it.totalPoints }
                 .thenBy { it.displayName },
         )
     }
