@@ -2,6 +2,7 @@ package com.example.padlecano.data.repository
 
 import com.example.padlecano.data.local.TournamentDao
 import com.example.padlecano.data.local.TournamentEntity
+import com.example.padlecano.data.local.TournamentPlayerEntity
 import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.domain.model.TournamentSummary
 import com.example.padlecano.domain.model.TournamentType
@@ -15,6 +16,22 @@ class DefaultTournamentRepository(
         return tournamentDao.observeTournaments().map { entities: List<TournamentEntity> ->
             entities.map { entity: TournamentEntity -> entity.toSummary() }
         }
+    }
+    override suspend fun createAmericanoTournament(title: String, playerDisplayNames: List<String>): Long {
+        val tournament: TournamentEntity = TournamentEntity(
+            title = title,
+            createdAtMillis = System.currentTimeMillis(),
+            status = TournamentStatus.ACTIVE.name,
+            tournamentType = TournamentType.AMERICANO.name,
+        )
+        val players: List<TournamentPlayerEntity> = playerDisplayNames.mapIndexed { index: Int, displayName: String ->
+            TournamentPlayerEntity(
+                tournamentId = 0L,
+                displayName = displayName,
+                sortOrder = index,
+            )
+        }
+        return tournamentDao.insertTournamentWithPlayers(tournament = tournament, players = players)
     }
 }
 

@@ -16,7 +16,8 @@ import androidx.navigation.navArgument
 import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.session.SessionViewModel
 import com.example.padlecano.ui.active.ActiveGamePlaceholderScreen
-import com.example.padlecano.ui.create.CreateGamePlaceholderScreen
+import com.example.padlecano.ui.create.CreateGameScreen
+import com.example.padlecano.ui.create.CreateGameViewModel
 import com.example.padlecano.ui.games.GamesListScreen
 import com.example.padlecano.ui.games.GamesListViewModel
 import com.example.padlecano.ui.login.LoginScreen
@@ -75,8 +76,17 @@ fun PadlecanoNavHost(
                 )
             }
             composable(route = NavigationDestination.CreateGame.route) {
-                CreateGamePlaceholderScreen(
+                val createGameViewModel: CreateGameViewModel = viewModel(factory = CreateGameViewModel.createFactory())
+                CreateGameScreen(
+                    viewModel = createGameViewModel,
                     onNavigateUp = { navController.navigateUp() },
+                    onTournamentCreated = { tournamentId: Long ->
+                        navController.navigate(route = activeGameRoute(tournamentId = tournamentId)) {
+                            popUpTo(route = NavigationDestination.CreateGame.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
                 )
             }
             composable(
