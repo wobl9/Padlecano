@@ -41,6 +41,23 @@
     <string name="active_game_error_exceeds_play_to_total">Сумма очков превышает лимит турнира: %1$d.</string>
     <string name="active_game_all_rounds_done">Все раунды завершены.</string>
     <string name="summary_title">Итоги</string>
-    <string name="summary_placeholder_body">Id турнира: %1$d. Таблица результатов — на следующем шаге.</string>
+    <string name="summary_loading">Загрузка…</string>
+    <string name="summary_load_error">Не удалось загрузить турнир.</string>
+    <string name="summary_sort_points">По очкам</string>
+    <string name="summary_sort_matches">По играм</string>
+    <string name="summary_column_rank">#</string>
+    <string name="summary_column_player">Игрок</string>
+    <string name="summary_column_points">Очки</string>
+    <string name="summary_column_games">Игры</string>
+    <string name="summary_column_wins">Победы</string>
+    <string name="summary_verify_schedule">Проверка расписания</string>
+    <string name="verification_title">Проверка расписания</string>
+    <string name="verification_subtitle">Матчи из базы сравниваются с идеальным расписанием Americano для этого числа игроков.</string>
+    <string name="verification_status_ok">Все пары «вместе» и «соперники» совпадают с ожиданием.</string>
+    <string name="verification_status_fail">Есть расхождения с идеальным расписанием или неполные данные.</string>
+    <string name="verification_row_with_other">%1$s — в паре: %2$d/%3$d · соперник: %4$d/%5$d %6$s</string>
+    <string name="verification_mark_ok">✓</string>
+    <string name="verification_mark_bad">✗</string>
+    <string name="verification_invalid_roster">Проверять нечего: число игроков должно быть кратно четырём.</string>
     <string name="content_description_navigate_up">Назад</string>
 </resources>

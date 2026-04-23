@@ -41,6 +41,23 @@
     <string name="active_game_error_exceeds_play_to_total">The combined score exceeds the limit of %1$d for this tournament.</string>
     <string name="active_game_all_rounds_done">All rounds completed.</string>
     <string name="summary_title">Results</string>
-    <string name="summary_placeholder_body">Tournament id: %1$d. Standings will be added in a later step.</string>
+    <string name="summary_loading">Loading…</string>
+    <string name="summary_load_error">Could not load this tournament.</string>
+    <string name="summary_sort_points">By points</string>
+    <string name="summary_sort_matches">By games</string>
+    <string name="summary_column_rank">#</string>
+    <string name="summary_column_player">Player</string>
+    <string name="summary_column_points">Pts</string>
+    <string name="summary_column_games">Games</string>
+    <string name="summary_column_wins">Wins</string>
+    <string name="summary_verify_schedule">Schedule check</string>
+    <string name="verification_title">Schedule check</string>
+    <string name="verification_subtitle">Stored matches are compared to the ideal Americano schedule for this player count.</string>
+    <string name="verification_status_ok">All partner and opponent counts match.</string>
+    <string name="verification_status_fail">Some counts differ from the ideal schedule (or data is incomplete).</string>
+    <string name="verification_row_with_other">%1$s — together: %2$d/%3$d · vs: %4$d/%5$d %6$s</string>
+    <string name="verification_mark_ok">✓</string>
+    <string name="verification_mark_bad">✗</string>
+    <string name="verification_invalid_roster">There is nothing to verify: the roster must be a multiple of four.</string>
     <string name="content_description_navigate_up">Navigate up</string>
 </resources>

@@ -10,6 +10,8 @@ import com.example.padlecano.domain.model.ActiveTournamentState
 import com.example.padlecano.domain.model.MatchScoreUpdate
 import com.example.padlecano.domain.model.MatchState
 import com.example.padlecano.domain.model.RoundState
+import com.example.padlecano.domain.model.TournamentMatchRecord
+import com.example.padlecano.domain.model.TournamentResultsPayload
 import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.domain.model.TournamentSummary
 import com.example.padlecano.domain.model.TournamentType
@@ -127,6 +129,30 @@ class DefaultTournamentRepository(
 
     override suspend fun deleteAllTournaments() {
         tournamentDao.deleteAllTournaments()
+    }
+
+    override suspend fun loadTournamentResultsPayload(tournamentId: Long): TournamentResultsPayload? {
+        val entity: TournamentEntity = tournamentDao.getTournamentById(tournamentId) ?: return null
+        val playerNames: List<String> = tournamentDao.getPlayersByTournamentId(tournamentId)
+            .sortedBy { it.sortOrder }
+            .map { it.displayName }
+        val records: List<TournamentMatchRecord> = tournamentDao.getMatchesByTournamentId(tournamentId)
+            .map { match: MatchEntity ->
+                TournamentMatchRecord(
+                    playerA1Index = match.playerA1Index,
+                    playerA2Index = match.playerA2Index,
+                    playerB1Index = match.playerB1Index,
+                    playerB2Index = match.playerB2Index,
+                    scoreA = match.scoreA,
+                    scoreB = match.scoreB,
+                    isScoreSet = match.isScoreSet,
+                )
+            }
+        return TournamentResultsPayload(
+            tournamentTitle = entity.title,
+            playerDisplayNames = playerNames,
+            matches = records,
+        )
     }
 }
 

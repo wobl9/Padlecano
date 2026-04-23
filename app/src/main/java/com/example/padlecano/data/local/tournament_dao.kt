@@ -30,6 +30,9 @@ interface TournamentDao {
     @Query("SELECT * FROM tournament_players WHERE tournamentId = :tournamentId ORDER BY sortOrder ASC")
     suspend fun getPlayersByTournamentId(tournamentId: Long): List<TournamentPlayerEntity>
 
+    @Query("SELECT * FROM matches WHERE tournamentId = :tournamentId")
+    suspend fun getMatchesByTournamentId(tournamentId: Long): List<MatchEntity>
+
     @Transaction
     @Query("SELECT * FROM rounds WHERE tournamentId = :tournamentId ORDER BY roundNumber ASC")
     fun observeRoundsWithMatches(tournamentId: Long): Flow<List<RoundWithMatches>>
