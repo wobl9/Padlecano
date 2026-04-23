@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Padlecano</string>
+    <string name="login_title">Padlecano</string>
+    <string name="login_subtitle">Организация турниров</string>
+    <string name="login_authorize">Авторизоваться</string>
+    <string name="games_title">Игры</string>
+    <string name="games_empty_hint">Пока нет игр. Создание — на следующем шаге.</string>
+</resources>

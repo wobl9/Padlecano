@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Padlecano</string>
+    <string name="login_title">Padlecano</string>
+    <string name="login_subtitle">Tournament organizer</string>
+    <string name="login_authorize">Authorize</string>
+    <string name="games_title">Games</string>
+    <string name="games_empty_hint">No games yet. You will create them in the next step.</string>
+</resources>
