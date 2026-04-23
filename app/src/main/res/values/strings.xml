@@ -24,7 +24,12 @@
     <string name="create_game_error_multiple_of_four">The number of players must be a multiple of four.</string>
     <string name="create_game_error_blank_name">Every player must have a name.</string>
     <string name="active_game_title">Active game</string>
-    <string name="active_game_placeholder_body">Tournament id: %1$d. Match grid will be added in a later step.</string>
+    <string name="active_game_round_progress">Round %1$d of %2$d</string>
+    <string name="active_game_court_number">Court %1$d</string>
+    <string name="active_game_confirm_round">Confirm round</string>
+    <string name="active_game_finish_tournament">Finish tournament</string>
+    <string name="active_game_score_error">Please enter scores for all courts.</string>
+    <string name="active_game_all_rounds_done">All rounds completed.</string>
     <string name="summary_title">Results</string>
     <string name="summary_placeholder_body">Tournament id: %1$d. Standings will be added in a later step.</string>
     <string name="content_description_navigate_up">Navigate up</string>

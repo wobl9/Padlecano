@@ -7,8 +7,10 @@ import androidx.room.RoomDatabase
     entities = [
         TournamentEntity::class,
         TournamentPlayerEntity::class,
+        RoundEntity::class,
+        MatchEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class PadlecanoDatabase : RoomDatabase() {

@@ -15,7 +15,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.session.SessionViewModel
-import com.example.padlecano.ui.active.ActiveGamePlaceholderScreen
+import com.example.padlecano.ui.active.ActiveGameScreen
+import com.example.padlecano.ui.active.ActiveGameViewModel
 import com.example.padlecano.ui.create.CreateGameScreen
 import com.example.padlecano.ui.create.CreateGameViewModel
 import com.example.padlecano.ui.games.GamesListScreen
@@ -96,9 +97,19 @@ fun PadlecanoNavHost(
                 ),
             ) { backStackEntry ->
                 val tournamentId: Long = checkNotNull(backStackEntry.arguments).getLong("tournamentId")
-                ActiveGamePlaceholderScreen(
-                    tournamentId = tournamentId,
+                val activeGameViewModel: ActiveGameViewModel = viewModel(
+                    factory = ActiveGameViewModel.createFactory(tournamentId = tournamentId),
+                )
+                ActiveGameScreen(
+                    viewModel = activeGameViewModel,
                     onNavigateUp = { navController.navigateUp() },
+                    onNavigateToSummary = { id: Long ->
+                        navController.navigate(route = summaryRoute(tournamentId = id)) {
+                            popUpTo(route = activeGameRoute(tournamentId = tournamentId)) {
+                                inclusive = true
+                            }
+                        }
+                    },
                 )
             }
             composable(

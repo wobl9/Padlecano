@@ -24,7 +24,12 @@
     <string name="create_game_error_multiple_of_four">Число игроков должно быть кратно четырём.</string>
     <string name="create_game_error_blank_name">У каждого игрока должно быть имя.</string>
     <string name="active_game_title">Активная игра</string>
-    <string name="active_game_placeholder_body">Id турнира: %1$d. Сетка матчей — на следующем шаге.</string>
+    <string name="active_game_round_progress">Раунд %1$d из %2$d</string>
+    <string name="active_game_court_number">Корт %1$d</string>
+    <string name="active_game_confirm_round">Подтвердить раунд</string>
+    <string name="active_game_finish_tournament">Завершить турнир</string>
+    <string name="active_game_score_error">Введите счёт на всех кортах.</string>
+    <string name="active_game_all_rounds_done">Все раунды завершены.</string>
     <string name="summary_title">Итоги</string>
     <string name="summary_placeholder_body">Id турнира: %1$d. Таблица результатов — на следующем шаге.</string>
     <string name="content_description_navigate_up">Назад</string>

@@ -12,7 +12,7 @@ class PadlecanoApplication : Application() {
             applicationContext,
             PadlecanoDatabase::class.java,
             "padlecano.db",
-        ).build()
+        ).fallbackToDestructiveMigration(dropAllTables = true).build()
     }
     val tournamentRepository: TournamentRepository by lazy {
         DefaultTournamentRepository(tournamentDao = database.tournamentDao())
