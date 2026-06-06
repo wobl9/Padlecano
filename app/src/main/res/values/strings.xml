@@ -11,6 +11,9 @@
     <string name="games_delete_all_confirm_message">This will remove every tournament and all related data. This cannot be undone.</string>
     <string name="games_delete_all_confirm">Delete</string>
     <string name="games_delete_all_cancel">Cancel</string>
+    <string name="games_delete_one_confirm_title">Delete this game?</string>
+    <string name="games_delete_one_confirm_message">This will remove \"%1$s\" and all related data. This cannot be undone.</string>
+    <string name="games_delete_one_confirm">Delete</string>
     <string name="tournament_untitled">Untitled tournament</string>
     <string name="tournament_status_draft">Draft</string>
     <string name="tournament_status_active">Active</string>
@@ -55,6 +58,14 @@
     <string name="summary_column_games">Games</string>
     <string name="summary_column_wins">Wins</string>
     <string name="summary_open_match_validity">Match review</string>
+    <string name="summary_share">Share</string>
+    <string name="summary_share_copy">Copy text</string>
+    <string name="summary_share_send">Send…</string>
+    <string name="summary_share_copied">Copied to clipboard</string>
+    <string name="summary_share_section_standings">STANDINGS</string>
+    <string name="summary_share_section_matches">MATCHES</string>
+    <string name="summary_share_chooser_title">Share tournament results</string>
+    <string name="summary_share_team_pair_separator"> &amp; </string>
     <string name="match_validity_title">Match review</string>
     <string name="match_validity_subtitle">Each card shows doubles partners on each side and the recorded score.</string>
     <string name="match_validity_all_ok">All matches pass basic checks.</string>
@@ -74,5 +85,7 @@
     <string name="match_validity_issue_negative_score">Scores cannot be negative.</string>
     <string name="match_validity_issue_combined_exceeds">Combined score exceeds the tournament limit (%1$d).</string>
     <string name="content_description_navigate_up">Navigate up</string>
+    <string name="content_description_share">Share results</string>
     <string name="content_description_remove_saved_name">Remove from saved names</string>
+    <string name="content_description_delete_tournament">Delete tournament</string>
 </resources>

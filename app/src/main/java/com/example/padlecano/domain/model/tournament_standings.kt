@@ -54,8 +54,15 @@ data class TournamentMatchRecord(
     val isScoreSet: Boolean,
 )
 
+data class TournamentRoundResults(
+    val roundNumber: Int,
+    val matches: List<TournamentMatchRecord>,
+)
+
 data class TournamentResultsPayload(
     val tournamentTitle: String,
+    val tournamentType: TournamentType,
     val playerDisplayNames: List<String>,
     val matches: List<TournamentMatchRecord>,
+    val rounds: List<TournamentRoundResults>,
 )

@@ -9,7 +9,9 @@ import com.example.padlecano.data.repository.TournamentRepository
 import com.example.padlecano.domain.model.PlayerStandingRow
 import com.example.padlecano.domain.model.SummarySortMode
 import com.example.padlecano.domain.model.TournamentResultsPayload
+import com.example.padlecano.domain.model.TournamentShareTextLabels
 import com.example.padlecano.domain.usecase.AmericanoTournamentResults
+import com.example.padlecano.domain.usecase.TournamentShareTextFormatter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -80,6 +82,22 @@ class SummaryViewModel(
 
     fun setSortMode(mode: SummarySortMode) {
         sortMode.update { mode }
+    }
+
+    fun buildShareText(labels: TournamentShareTextLabels): String? {
+        val data: TournamentResultsPayload = payload.value ?: return null
+        val currentRows: List<PlayerStandingRow> = uiState.value.rows
+        if (currentRows.isEmpty() && data.rounds.isEmpty()) {
+            return null
+        }
+        return TournamentShareTextFormatter.format(
+            tournamentTitle = data.tournamentTitle,
+            tournamentType = data.tournamentType,
+            playerNames = data.playerDisplayNames,
+            standingsRows = currentRows,
+            rounds = data.rounds,
+            labels = labels,
+        )
     }
 
     companion object {

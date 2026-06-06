@@ -15,6 +15,7 @@ import com.example.padlecano.domain.model.RawMatchForAudit
 import com.example.padlecano.domain.model.RawRoundForAudit
 import com.example.padlecano.domain.model.TournamentMatchRecord
 import com.example.padlecano.domain.model.TournamentResultsPayload
+import com.example.padlecano.domain.model.TournamentRoundResults
 import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.domain.model.TournamentSummary
 import com.example.padlecano.domain.model.TournamentType
@@ -131,6 +132,10 @@ class DefaultTournamentRepository(
         )
     }
 
+    override suspend fun deleteTournament(tournamentId: Long) {
+        tournamentDao.deleteTournament(tournamentId = tournamentId)
+    }
+
     override suspend fun deleteAllTournaments() {
         tournamentDao.deleteAllTournaments()
     }
@@ -142,20 +147,23 @@ class DefaultTournamentRepository(
             .map { it.displayName }
         val records: List<TournamentMatchRecord> = tournamentDao.getMatchesByTournamentId(tournamentId)
             .map { match: MatchEntity ->
-                TournamentMatchRecord(
-                    playerA1Index = match.playerA1Index,
-                    playerA2Index = match.playerA2Index,
-                    playerB1Index = match.playerB1Index,
-                    playerB2Index = match.playerB2Index,
-                    scoreA = match.scoreA,
-                    scoreB = match.scoreB,
-                    isScoreSet = match.isScoreSet,
+                match.toMatchRecord()
+            }
+        val rounds: List<TournamentRoundResults> = tournamentDao.getRoundsWithMatchesOnce(tournamentId)
+            .map { rwm: RoundWithMatches ->
+                TournamentRoundResults(
+                    roundNumber = rwm.round.roundNumber,
+                    matches = rwm.matches.sortedBy { it.id }.map { match: MatchEntity ->
+                        match.toMatchRecord()
+                    },
                 )
             }
         return TournamentResultsPayload(
             tournamentTitle = entity.title,
+            tournamentType = entity.tournamentType.toTournamentType(),
             playerDisplayNames = playerNames,
             matches = records,
+            rounds = rounds,
         )
     }
 
@@ -215,4 +223,16 @@ private fun String.toTournamentType(): TournamentType {
     } catch (_: IllegalArgumentException) {
         TournamentType.AMERICANO
     }
+}
+
+private fun MatchEntity.toMatchRecord(): TournamentMatchRecord {
+    return TournamentMatchRecord(
+        playerA1Index = playerA1Index,
+        playerA2Index = playerA2Index,
+        playerB1Index = playerB1Index,
+        playerB2Index = playerB2Index,
+        scoreA = scoreA,
+        scoreB = scoreB,
+        isScoreSet = isScoreSet,
+    )
 }

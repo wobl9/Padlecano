@@ -67,6 +67,9 @@ fun PadlecanoNavHost(
                     onDeleteAllGamesClick = {
                         gamesListViewModel.deleteAllTournaments()
                     },
+                    onDeleteTournamentClick = { tournament ->
+                        gamesListViewModel.deleteTournament(tournamentId = tournament.id)
+                    },
                     onTournamentClick = { tournament ->
                         when (tournament.status) {
                             TournamentStatus.DRAFT -> {

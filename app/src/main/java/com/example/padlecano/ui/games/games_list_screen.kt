@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,11 +12,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,10 +48,12 @@ fun GamesListScreen(
     uiState: GamesListUiState,
     onCreateGameClick: () -> Unit,
     onDeleteAllGamesClick: () -> Unit,
+    onDeleteTournamentClick: (TournamentSummary) -> Unit,
     onTournamentClick: (TournamentSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showDeleteAllDialog: Boolean by remember { mutableStateOf(value = false) }
+    var tournamentPendingDelete: TournamentSummary? by remember { mutableStateOf(value = null) }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -95,6 +100,41 @@ fun GamesListScreen(
                 },
             )
         }
+        val pendingDelete: TournamentSummary? = tournamentPendingDelete
+        if (pendingDelete != null) {
+            val titleText: String = if (pendingDelete.title.isBlank()) {
+                stringResource(R.string.tournament_untitled)
+            } else {
+                pendingDelete.title
+            }
+            AlertDialog(
+                onDismissRequest = { tournamentPendingDelete = null },
+                title = { Text(text = stringResource(R.string.games_delete_one_confirm_title)) },
+                text = {
+                    Text(
+                        text = stringResource(
+                            R.string.games_delete_one_confirm_message,
+                            titleText,
+                        ),
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            onDeleteTournamentClick(pendingDelete)
+                            tournamentPendingDelete = null
+                        },
+                    ) {
+                        Text(text = stringResource(R.string.games_delete_one_confirm))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { tournamentPendingDelete = null }) {
+                        Text(text = stringResource(R.string.games_delete_all_cancel))
+                    }
+                },
+            )
+        }
         if (uiState.tournaments.isEmpty()) {
             Column(
                 modifier = Modifier
@@ -123,6 +163,7 @@ fun GamesListScreen(
                     TournamentRow(
                         tournament = tournament,
                         onClick = { onTournamentClick(tournament) },
+                        onDeleteClick = { tournamentPendingDelete = tournament },
                     )
                 }
             }
@@ -134,6 +175,7 @@ fun GamesListScreen(
 private fun TournamentRow(
     tournament: TournamentSummary,
     onClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val titleText: String = if (tournament.title.isBlank()) {
@@ -154,17 +196,29 @@ private fun TournamentRow(
         TournamentStatus.FINISHED -> stringResource(R.string.tournament_status_finished)
     }
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+        modifier = modifier.fillMaxWidth(),
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(text = titleText, style = MaterialTheme.typography.titleMedium)
-            Text(text = statusLabel, style = MaterialTheme.typography.labelLarge)
-            Text(text = formattedDate, style = MaterialTheme.typography.bodySmall)
+            Column(
+                modifier = Modifier
+                    .weight(weight = 1f)
+                    .clickable(onClick = onClick)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Text(text = titleText, style = MaterialTheme.typography.titleMedium)
+                Text(text = statusLabel, style = MaterialTheme.typography.labelLarge)
+                Text(text = formattedDate, style = MaterialTheme.typography.bodySmall)
+            }
+            IconButton(onClick = onDeleteClick) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = stringResource(R.string.content_description_delete_tournament),
+                )
+            }
         }
     }
 }
@@ -187,6 +241,7 @@ private fun GamesListScreenPreview() {
             ),
             onCreateGameClick = {},
             onDeleteAllGamesClick = {},
+            onDeleteTournamentClick = {},
             onTournamentClick = {},
         )
     }

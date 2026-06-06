@@ -55,6 +55,14 @@
     <string name="summary_column_games">Игры</string>
     <string name="summary_column_wins">Победы</string>
     <string name="summary_open_match_validity">Просмотр матчей</string>
+    <string name="summary_share">Поделиться</string>
+    <string name="summary_share_copy">Скопировать текст</string>
+    <string name="summary_share_send">Отправить…</string>
+    <string name="summary_share_copied">Скопировано в буфер обмена</string>
+    <string name="summary_share_section_standings">ИТОГИ</string>
+    <string name="summary_share_section_matches">МАТЧИ</string>
+    <string name="summary_share_chooser_title">Поделиться результатами турнира</string>
+    <string name="summary_share_team_pair_separator"> и </string>
     <string name="match_validity_title">Просмотр матчей</string>
     <string name="match_validity_subtitle">В каждой строке — пары в даблсе (A и B против C и D) и сохранённый счёт.</string>
     <string name="match_validity_all_ok">Все матчи проходят базовые проверки.</string>
@@ -74,5 +82,6 @@
     <string name="match_validity_issue_negative_score">Счёт не может быть отрицательным.</string>
     <string name="match_validity_issue_combined_exceeds">Сумма очков превышает лимит турнира (%1$d).</string>
     <string name="content_description_navigate_up">Назад</string>
+    <string name="content_description_share">Поделиться результатами</string>
     <string name="content_description_remove_saved_name">Удалить из сохранённых</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.padlecano.ui.summary
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -20,14 +22,23 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -35,6 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.padlecano.R
 import com.example.padlecano.domain.model.PlayerStandingRow
 import com.example.padlecano.domain.model.SummarySortMode
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,8 +57,15 @@ fun SummaryScreen(
     modifier: Modifier = Modifier,
 ) {
     val uiState: SummaryUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    var isShareSheetVisible: Boolean by remember { mutableStateOf(false) }
+    val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val canShare: Boolean = !uiState.isLoading && !uiState.loadFailed
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.summary_title)) },
@@ -56,6 +75,16 @@ fun SummaryScreen(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.content_description_navigate_up),
                         )
+                    }
+                },
+                actions = {
+                    if (canShare) {
+                        IconButton(onClick = { isShareSheetVisible = true }) {
+                            Icon(
+                                imageVector = Icons.Filled.Share,
+                                contentDescription = stringResource(R.string.content_description_share),
+                            )
+                        }
                     }
                 },
             )
@@ -100,6 +129,78 @@ fun SummaryScreen(
                 )
             }
         }
+    }
+    if (isShareSheetVisible) {
+        ModalBottomSheet(
+            onDismissRequest = { isShareSheetVisible = false },
+            sheetState = shareSheetState,
+        ) {
+            ShareBottomSheetContent(
+                onCopyClick = {
+                    val shareText: String? = viewModel.buildShareText(labels = buildShareTextLabels(context))
+                    if (shareText != null) {
+                        copyTextToClipboard(context = context, text = shareText)
+                        coroutineScope.launch {
+                            shareSheetState.hide()
+                            isShareSheetVisible = false
+                            snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.summary_share_copied),
+                            )
+                        }
+                    }
+                },
+                onSendClick = {
+                    val shareText: String? = viewModel.buildShareText(labels = buildShareTextLabels(context))
+                    if (shareText != null) {
+                        sharePlainText(
+                            context = context,
+                            chooserTitle = context.getString(R.string.summary_share_chooser_title),
+                            text = shareText,
+                        )
+                        coroutineScope.launch {
+                            shareSheetState.hide()
+                            isShareSheetVisible = false
+                        }
+                    }
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ShareBottomSheetContent(
+    onCopyClick: () -> Unit,
+    onSendClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 24.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.summary_share),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+        )
+        Text(
+            text = stringResource(R.string.summary_share_copy),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onCopyClick)
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        Text(
+            text = stringResource(R.string.summary_share_send),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onSendClick)
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+        )
     }
 }
 

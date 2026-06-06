@@ -29,6 +29,11 @@ class GamesListViewModel(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000L),
             initialValue = GamesListUiState(),
         )
+    fun deleteTournament(tournamentId: Long) {
+        viewModelScope.launch {
+            tournamentRepository.deleteTournament(tournamentId = tournamentId)
+        }
+    }
     fun deleteAllTournaments() {
         viewModelScope.launch {
             tournamentRepository.deleteAllTournaments()

@@ -17,6 +17,7 @@ interface TournamentRepository {
     fun observeActiveTournament(tournamentId: Long): Flow<ActiveTournamentState?>
     suspend fun saveMatchScores(scores: List<MatchScoreUpdate>)
     suspend fun finishTournament(tournamentId: Long)
+    suspend fun deleteTournament(tournamentId: Long)
     suspend fun deleteAllTournaments()
     suspend fun loadTournamentResultsPayload(tournamentId: Long): TournamentResultsPayload?
     suspend fun loadMatchValidityAudit(tournamentId: Long): MatchValidityAudit?
