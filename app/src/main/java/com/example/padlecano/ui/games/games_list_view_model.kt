@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.padlecano.PadlecanoApplication
 import com.example.padlecano.data.repository.TournamentRepository
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.domain.model.TournamentSummary
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +30,7 @@ class GamesListViewModel(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000L),
             initialValue = GamesListUiState(),
         )
-    fun deleteTournament(tournamentId: Long) {
+    fun deleteTournament(tournamentId: EntityId) {
         viewModelScope.launch {
             tournamentRepository.deleteTournament(tournamentId = tournamentId)
         }

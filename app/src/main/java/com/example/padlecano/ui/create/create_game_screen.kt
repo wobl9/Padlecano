@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.padlecano.R
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.domain.model.TournamentType
 import kotlinx.coroutines.launch
 
@@ -56,7 +57,7 @@ import kotlinx.coroutines.launch
 fun CreateGameScreen(
     viewModel: CreateGameViewModel,
     onNavigateUp: () -> Unit,
-    onTournamentCreated: (Long) -> Unit,
+    onTournamentCreated: (EntityId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uiState: CreateGameUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,7 +71,7 @@ fun CreateGameScreen(
     val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = viewModel) {
         launch {
-            viewModel.navigationEvents.collect { tournamentId: Long ->
+            viewModel.navigationEvents.collect { tournamentId: EntityId ->
                 onTournamentCreated(tournamentId)
             }
         }

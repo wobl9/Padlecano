@@ -1,7 +1,7 @@
 package com.example.padlecano.domain.model
 
 data class ActiveTournamentState(
-    val tournamentId: Long,
+    val tournamentId: EntityId,
     val title: String,
     val players: List<String>,
     val maxCombinedMatchScore: Int,
@@ -9,13 +9,13 @@ data class ActiveTournamentState(
 )
 
 data class RoundState(
-    val roundId: Long,
+    val roundId: EntityId,
     val roundNumber: Int,
     val matches: List<MatchState>,
 )
 
 data class MatchState(
-    val matchId: Long,
+    val matchId: EntityId,
     val playerA1Index: Int,
     val playerA2Index: Int,
     val playerB1Index: Int,
@@ -26,7 +26,7 @@ data class MatchState(
 )
 
 data class MatchScoreUpdate(
-    val matchId: Long,
+    val matchId: EntityId,
     val scoreA: Int,
     val scoreB: Int,
 )

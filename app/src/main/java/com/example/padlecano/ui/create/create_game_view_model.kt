@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.padlecano.PadlecanoApplication
 import com.example.padlecano.data.preferences.SavedPlayerNamesPreferencesRepository
 import com.example.padlecano.data.repository.TournamentRepository
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.domain.model.TournamentType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -46,10 +47,10 @@ class CreateGameViewModel(
 ) : ViewModel() {
     private val formState: MutableStateFlow<CreateGameUiState> = MutableStateFlow(CreateGameUiState())
     private val savedNamesState: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
-    private val navigationChannel: Channel<Long> = Channel(capacity = Channel.BUFFERED)
+    private val navigationChannel: Channel<EntityId> = Channel(capacity = Channel.BUFFERED)
     private val eventChannel: Channel<CreateGameEvent> = Channel(capacity = Channel.BUFFERED)
 
-    val navigationEvents: Flow<Long> = navigationChannel.receiveAsFlow()
+    val navigationEvents: Flow<EntityId> = navigationChannel.receiveAsFlow()
     val events: Flow<CreateGameEvent> = eventChannel.receiveAsFlow()
 
     val uiState: StateFlow<CreateGameUiState> = combine(
@@ -171,7 +172,7 @@ class CreateGameViewModel(
                 val snapshot: CreateGameUiState = formState.value
                 val trimmedNames: List<String> = snapshot.playerNames.map { name: String -> name.trim() }
                 val maxCombined: Int = checkNotNull(snapshot.maxCombinedScoreInput.toIntOrNull())
-                val tournamentId: Long = tournamentRepository.createAmericanoTournament(
+                val tournamentId: EntityId = tournamentRepository.createAmericanoTournament(
                     title = snapshot.title.trim(),
                     playerDisplayNames = trimmedNames,
                     maxCombinedMatchScore = maxCombined,

@@ -6,9 +6,16 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.padlecano.domain.model.EntityId
 
+/** Elo rating change audit trail (multiplayer phase). */
 @Entity(
-    tableName = "rounds",
+    tableName = "rating_history",
     foreignKeys = [
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["userId"],
+            onDelete = ForeignKey.CASCADE,
+        ),
         ForeignKey(
             entity = TournamentEntity::class,
             parentColumns = ["id"],
@@ -16,12 +23,18 @@ import com.example.padlecano.domain.model.EntityId
             onDelete = ForeignKey.CASCADE,
         ),
     ],
-    indices = [Index(value = ["tournamentId"])],
+    indices = [
+        Index(value = ["userId"]),
+        Index(value = ["tournamentId"]),
+    ],
 )
-data class RoundEntity(
+data class RatingHistoryEntity(
     @PrimaryKey val id: EntityId,
+    val userId: EntityId,
     val tournamentId: EntityId,
-    val roundNumber: Int,
+    val ratingBefore: Double,
+    val ratingAfter: Double,
+    val createdAtMillis: Long,
     val ownerId: EntityId?,
     val updatedAt: Long,
     val version: Int,

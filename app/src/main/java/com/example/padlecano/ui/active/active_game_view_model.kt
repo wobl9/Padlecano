@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.padlecano.PadlecanoApplication
 import com.example.padlecano.data.repository.TournamentRepository
 import com.example.padlecano.domain.model.ActiveTournamentState
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.domain.model.MatchScoreUpdate
 import com.example.padlecano.domain.model.RoundState
 import kotlinx.coroutines.channels.Channel
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 data class ScoreInput(val scoreA: String = "", val scoreB: String = "")
 
 data class CourtUiModel(
-    val matchId: Long,
+    val matchId: EntityId,
     val courtNumber: Int,
     val teamAName1: String,
     val teamAName2: String,
@@ -38,7 +39,7 @@ data class ActiveGameUiState(
     val currentRoundNumber: Int = 0,
     val totalRounds: Int = 0,
     val courts: List<CourtUiModel> = emptyList(),
-    val draftScores: Map<Long, ScoreInput> = emptyMap(),
+    val draftScores: Map<EntityId, ScoreInput> = emptyMap(),
     val isSaving: Boolean = false,
     val allScoreFieldsFilled: Boolean = false,
     val combinedScoreExceedsLimit: Boolean = false,
@@ -46,15 +47,15 @@ data class ActiveGameUiState(
 )
 
 sealed interface ActiveGameEvent {
-    data class NavigateToSummary(val tournamentId: Long) : ActiveGameEvent
+    data class NavigateToSummary(val tournamentId: EntityId) : ActiveGameEvent
 }
 
 class ActiveGameViewModel(
-    private val tournamentId: Long,
+    private val tournamentId: EntityId,
     private val repository: TournamentRepository,
 ) : ViewModel() {
 
-    private val draftScores: MutableStateFlow<Map<Long, ScoreInput>> = MutableStateFlow(emptyMap())
+    private val draftScores: MutableStateFlow<Map<EntityId, ScoreInput>> = MutableStateFlow(emptyMap())
     private val isSaving: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val showMissingScoresMessage: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -63,7 +64,7 @@ class ActiveGameViewModel(
         draftScores,
         isSaving,
         showMissingScoresMessage,
-    ) { tournamentState: ActiveTournamentState?, drafts: Map<Long, ScoreInput>, saving: Boolean, missingMessage: Boolean ->
+    ) { tournamentState: ActiveTournamentState?, drafts: Map<EntityId, ScoreInput>, saving: Boolean, missingMessage: Boolean ->
         buildUiState(
             tournamentState = tournamentState,
             drafts = drafts,
@@ -79,10 +80,10 @@ class ActiveGameViewModel(
     private val eventChannel: Channel<ActiveGameEvent> = Channel(capacity = Channel.BUFFERED)
     val events: Flow<ActiveGameEvent> = eventChannel.receiveAsFlow()
 
-    fun updateScoreA(matchId: Long, value: String) {
+    fun updateScoreA(matchId: EntityId, value: String) {
         val filtered: String = value.filter { it.isDigit() }.take(3)
         val maxCombined: Int = uiState.value.maxCombinedMatchScore
-        draftScores.update { current: Map<Long, ScoreInput> ->
+        draftScores.update { current: Map<EntityId, ScoreInput> ->
             val previous: ScoreInput = current[matchId] ?: ScoreInput()
             val next: ScoreInput = afterEditingScoreA(
                 maxCombinedMatchScore = maxCombined,
@@ -94,10 +95,10 @@ class ActiveGameViewModel(
         showMissingScoresMessage.value = false
     }
 
-    fun updateScoreB(matchId: Long, value: String) {
+    fun updateScoreB(matchId: EntityId, value: String) {
         val filtered: String = value.filter { it.isDigit() }.take(3)
         val maxCombined: Int = uiState.value.maxCombinedMatchScore
-        draftScores.update { current: Map<Long, ScoreInput> ->
+        draftScores.update { current: Map<EntityId, ScoreInput> ->
             val previous: ScoreInput = current[matchId] ?: ScoreInput()
             val next: ScoreInput = afterEditingScoreB(
                 maxCombinedMatchScore = maxCombined,
@@ -239,7 +240,7 @@ class ActiveGameViewModel(
 
     private fun buildUiState(
         tournamentState: ActiveTournamentState?,
-        drafts: Map<Long, ScoreInput>,
+        drafts: Map<EntityId, ScoreInput>,
         saving: Boolean,
         showMissingScoresMessage: Boolean,
     ): ActiveGameUiState {
@@ -301,7 +302,7 @@ class ActiveGameViewModel(
     companion object {
         private const val MIN_AUTO_SCORE: Int = 0
         private const val MAX_AUTO_SCORE: Int = 999
-        fun createFactory(tournamentId: Long): ViewModelProvider.Factory {
+        fun createFactory(tournamentId: EntityId): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                     val application = checkNotNull(

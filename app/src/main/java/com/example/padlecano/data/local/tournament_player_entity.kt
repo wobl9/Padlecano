@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.padlecano.domain.model.EntityId
 
 @Entity(
     tableName = "tournament_players",
@@ -18,8 +19,12 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["tournamentId"])],
 )
 data class TournamentPlayerEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
-    val tournamentId: Long,
+    @PrimaryKey val id: EntityId,
+    val tournamentId: EntityId,
     val displayName: String,
     val sortOrder: Int,
+    val ownerId: EntityId?,
+    val updatedAt: Long,
+    val version: Int,
+    val deletedAt: Long?,
 )

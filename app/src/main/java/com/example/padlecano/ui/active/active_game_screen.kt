@@ -42,6 +42,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +50,7 @@ import com.example.padlecano.R
 fun ActiveGameScreen(
     viewModel: ActiveGameViewModel,
     onNavigateUp: () -> Unit,
-    onNavigateToSummary: (Long) -> Unit,
+    onNavigateToSummary: (EntityId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uiState: ActiveGameUiState by viewModel.uiState.collectAsStateWithLifecycle()

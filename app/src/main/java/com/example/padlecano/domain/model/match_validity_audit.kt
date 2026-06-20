@@ -10,7 +10,7 @@ enum class MatchValidityIssue {
 }
 
 data class RawMatchForAudit(
-    val matchId: Long,
+    val matchId: EntityId,
     val playerA1Index: Int,
     val playerA2Index: Int,
     val playerB1Index: Int,
@@ -26,7 +26,7 @@ data class RawRoundForAudit(
 )
 
 data class AuditedMatchRow(
-    val matchId: Long,
+    val matchId: EntityId,
     val roundNumber: Int,
     val courtNumber: Int,
     val teamAPairLabel: String,

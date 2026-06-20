@@ -1,6 +1,7 @@
 package com.example.padlecano.data.repository
 
 import com.example.padlecano.domain.model.ActiveTournamentState
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.domain.model.MatchScoreUpdate
 import com.example.padlecano.domain.model.MatchValidityAudit
 import com.example.padlecano.domain.model.TournamentResultsPayload
@@ -13,12 +14,12 @@ interface TournamentRepository {
         title: String,
         playerDisplayNames: List<String>,
         maxCombinedMatchScore: Int,
-    ): Long
-    fun observeActiveTournament(tournamentId: Long): Flow<ActiveTournamentState?>
+    ): EntityId
+    fun observeActiveTournament(tournamentId: EntityId): Flow<ActiveTournamentState?>
     suspend fun saveMatchScores(scores: List<MatchScoreUpdate>)
-    suspend fun finishTournament(tournamentId: Long)
-    suspend fun deleteTournament(tournamentId: Long)
+    suspend fun finishTournament(tournamentId: EntityId)
+    suspend fun deleteTournament(tournamentId: EntityId)
     suspend fun deleteAllTournaments()
-    suspend fun loadTournamentResultsPayload(tournamentId: Long): TournamentResultsPayload?
-    suspend fun loadMatchValidityAudit(tournamentId: Long): MatchValidityAudit?
+    suspend fun loadTournamentResultsPayload(tournamentId: EntityId): TournamentResultsPayload?
+    suspend fun loadMatchValidityAudit(tournamentId: EntityId): MatchValidityAudit?
 }

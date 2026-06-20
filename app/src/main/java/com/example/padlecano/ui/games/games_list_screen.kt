@@ -231,7 +231,7 @@ private fun GamesListScreenPreview() {
             uiState = GamesListUiState(
                 tournaments = listOf(
                     TournamentSummary(
-                        id = 1L,
+                        id = "preview-tournament-id",
                         title = "Morning Americano",
                         createdAtMillis = 1_700_000_000_000L,
                         status = TournamentStatus.ACTIVE,

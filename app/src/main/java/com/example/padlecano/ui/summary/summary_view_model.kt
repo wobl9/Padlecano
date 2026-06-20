@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.padlecano.PadlecanoApplication
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.data.repository.TournamentRepository
 import com.example.padlecano.domain.model.PlayerStandingRow
 import com.example.padlecano.domain.model.SummarySortMode
@@ -29,7 +30,7 @@ data class SummaryUiState(
 )
 
 class SummaryViewModel(
-    private val tournamentId: Long,
+    private val tournamentId: EntityId,
     private val repository: TournamentRepository,
 ) : ViewModel() {
     private val sortMode: MutableStateFlow<SummarySortMode> =
@@ -101,7 +102,7 @@ class SummaryViewModel(
     }
 
     companion object {
-        fun createFactory(tournamentId: Long): ViewModelProvider.Factory {
+        fun createFactory(tournamentId: EntityId): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                     val application: PadlecanoApplication = checkNotNull(

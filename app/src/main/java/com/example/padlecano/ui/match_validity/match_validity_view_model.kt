@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.padlecano.PadlecanoApplication
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.data.repository.TournamentRepository
 import com.example.padlecano.domain.model.MatchValidityAudit
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,7 @@ data class MatchValidityUiState(
 )
 
 class MatchValidityViewModel(
-    private val tournamentId: Long,
+    private val tournamentId: EntityId,
     private val repository: TournamentRepository,
 ) : ViewModel() {
     private val state: MutableStateFlow<MatchValidityUiState> = MutableStateFlow(MatchValidityUiState())
@@ -42,7 +43,7 @@ class MatchValidityViewModel(
     }
 
     companion object {
-        fun createFactory(tournamentId: Long): ViewModelProvider.Factory {
+        fun createFactory(tournamentId: EntityId): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                     val application: PadlecanoApplication = checkNotNull(

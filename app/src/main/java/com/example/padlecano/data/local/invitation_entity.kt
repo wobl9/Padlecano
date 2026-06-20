@@ -6,8 +6,9 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.padlecano.domain.model.EntityId
 
+/** Tournament invite by share code or targeted user (multiplayer phase). */
 @Entity(
-    tableName = "rounds",
+    tableName = "invitations",
     foreignKeys = [
         ForeignKey(
             entity = TournamentEntity::class,
@@ -15,13 +16,25 @@ import com.example.padlecano.domain.model.EntityId
             childColumns = ["tournamentId"],
             onDelete = ForeignKey.CASCADE,
         ),
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["invitedUserId"],
+            onDelete = ForeignKey.SET_NULL,
+        ),
     ],
-    indices = [Index(value = ["tournamentId"])],
+    indices = [
+        Index(value = ["tournamentId"]),
+        Index(value = ["code"], unique = true),
+        Index(value = ["invitedUserId"]),
+    ],
 )
-data class RoundEntity(
+data class InvitationEntity(
     @PrimaryKey val id: EntityId,
     val tournamentId: EntityId,
-    val roundNumber: Int,
+    val code: String,
+    val invitedUserId: EntityId?,
+    val status: String,
     val ownerId: EntityId?,
     val updatedAt: Long,
     val version: Int,

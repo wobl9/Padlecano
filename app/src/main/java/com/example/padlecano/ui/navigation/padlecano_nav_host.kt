@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.session.SessionViewModel
 import com.example.padlecano.ui.active.ActiveGameScreen
@@ -90,7 +91,7 @@ fun PadlecanoNavHost(
                 CreateGameScreen(
                     viewModel = createGameViewModel,
                     onNavigateUp = { navController.navigateUp() },
-                    onTournamentCreated = { tournamentId: Long ->
+                    onTournamentCreated = { tournamentId: EntityId ->
                         navController.navigate(route = activeGameRoute(tournamentId = tournamentId)) {
                             popUpTo(route = NavigationDestination.CreateGame.route) {
                                 inclusive = true
@@ -102,17 +103,17 @@ fun PadlecanoNavHost(
             composable(
                 route = NavigationDestination.ActiveGame.route,
                 arguments = listOf(
-                    navArgument(name = "tournamentId") { type = NavType.LongType },
+                    navArgument(name = "tournamentId") { type = NavType.StringType },
                 ),
             ) { backStackEntry ->
-                val tournamentId: Long = checkNotNull(backStackEntry.arguments).getLong("tournamentId")
+                val tournamentId: EntityId = checkNotNull(backStackEntry.arguments?.getString("tournamentId"))
                 val activeGameViewModel: ActiveGameViewModel = viewModel(
                     factory = ActiveGameViewModel.createFactory(tournamentId = tournamentId),
                 )
                 ActiveGameScreen(
                     viewModel = activeGameViewModel,
                     onNavigateUp = { navController.navigateUp() },
-                    onNavigateToSummary = { id: Long ->
+                    onNavigateToSummary = { id: EntityId ->
                         navController.navigate(route = summaryRoute(tournamentId = id)) {
                             popUpTo(route = activeGameRoute(tournamentId = tournamentId)) {
                                 inclusive = true
@@ -124,10 +125,10 @@ fun PadlecanoNavHost(
             composable(
                 route = NavigationDestination.Summary.route,
                 arguments = listOf(
-                    navArgument(name = "tournamentId") { type = NavType.LongType },
+                    navArgument(name = "tournamentId") { type = NavType.StringType },
                 ),
             ) { backStackEntry ->
-                val tournamentId: Long = checkNotNull(backStackEntry.arguments).getLong("tournamentId")
+                val tournamentId: EntityId = checkNotNull(backStackEntry.arguments?.getString("tournamentId"))
                 val summaryViewModel: SummaryViewModel = viewModel(
                     factory = SummaryViewModel.createFactory(tournamentId = tournamentId),
                 )
@@ -142,10 +143,10 @@ fun PadlecanoNavHost(
             composable(
                 route = NavigationDestination.MatchValidity.route,
                 arguments = listOf(
-                    navArgument(name = "tournamentId") { type = NavType.LongType },
+                    navArgument(name = "tournamentId") { type = NavType.StringType },
                 ),
             ) { backStackEntry ->
-                val tournamentId: Long = checkNotNull(backStackEntry.arguments).getLong("tournamentId")
+                val tournamentId: EntityId = checkNotNull(backStackEntry.arguments?.getString("tournamentId"))
                 val matchValidityViewModel: MatchValidityViewModel = viewModel(
                     factory = MatchValidityViewModel.createFactory(tournamentId = tournamentId),
                 )
