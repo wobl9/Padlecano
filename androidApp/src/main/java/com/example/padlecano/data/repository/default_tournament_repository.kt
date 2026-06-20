@@ -24,6 +24,7 @@ import com.example.padlecano.domain.model.TournamentStatus
 import com.example.padlecano.domain.model.TournamentSummary
 import com.example.padlecano.domain.model.TournamentType
 import com.example.padlecano.domain.model.newEntityId
+import com.example.padlecano.domain.repository.TournamentRepository
 import com.example.padlecano.domain.usecase.AmericanoScheduleGenerator
 import com.example.padlecano.domain.usecase.MatchValidityAuditBuilder
 import kotlinx.coroutines.flow.Flow

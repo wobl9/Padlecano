@@ -5,7 +5,8 @@ import androidx.room.Room
 import com.example.padlecano.data.local.PadlecanoDatabase
 import com.example.padlecano.data.preferences.SavedPlayerNamesPreferencesRepository
 import com.example.padlecano.data.repository.DefaultTournamentRepository
-import com.example.padlecano.data.repository.TournamentRepository
+import com.example.padlecano.domain.repository.SavedPlayerNamesRepository
+import com.example.padlecano.domain.repository.TournamentRepository
 
 class PadlecanoApplication : Application() {
     private val database: PadlecanoDatabase by lazy {
@@ -18,7 +19,7 @@ class PadlecanoApplication : Application() {
     val tournamentRepository: TournamentRepository by lazy {
         DefaultTournamentRepository(tournamentDao = database.tournamentDao())
     }
-    val savedPlayerNamesRepository: SavedPlayerNamesPreferencesRepository by lazy {
+    val savedPlayerNamesRepository: SavedPlayerNamesRepository by lazy {
         SavedPlayerNamesPreferencesRepository(applicationContext = applicationContext)
     }
 }

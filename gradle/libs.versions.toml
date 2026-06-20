@@ -11,6 +11,8 @@ ksp = "2.3.5"
 composeBom = "2026.02.01"
 composeMultiplatform = "1.10.0"
 navigationCompose = "2.8.9"
+jetbrainsLifecycle = "2.9.1"
+jetbrainsNavigation = "2.9.0-beta04"
 room = "2.7.2"
 datastorePreferences = "1.1.7"
 sqldelight = "2.0.2"
@@ -52,6 +54,9 @@ compose-foundation = { group = "org.jetbrains.compose.foundation", name = "found
 compose-ui = { group = "org.jetbrains.compose.ui", name = "ui", version.ref = "composeMultiplatform" }
 compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version = "1.10.0-alpha05" }
 compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "composeMultiplatform" }
+jetbrains-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "jetbrainsLifecycle" }
+jetbrains-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "jetbrainsLifecycle" }
+jetbrains-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "jetbrainsNavigation" }
 compose-html-core = { group = "org.jetbrains.compose.html", name = "html-core", version.ref = "composeMultiplatform" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }

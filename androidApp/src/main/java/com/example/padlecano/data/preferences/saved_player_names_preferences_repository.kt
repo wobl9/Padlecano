@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.padlecano.domain.repository.SavedPlayerNamesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -15,16 +16,16 @@ private val Context.savedPlayerNamesDataStore: DataStore<Preferences> by prefere
 
 class SavedPlayerNamesPreferencesRepository(
     private val applicationContext: Context,
-) {
+) : SavedPlayerNamesRepository {
     private val blobKey: Preferences.Key<String> = stringPreferencesKey("names_blob")
 
-    fun observeSavedNames(): Flow<List<String>> {
+    override fun observeSavedNames(): Flow<List<String>> {
         return applicationContext.savedPlayerNamesDataStore.data.map { preferences: Preferences ->
             parseBlob(raw = preferences[blobKey])
         }
     }
 
-    suspend fun addNames(names: Collection<String>) {
+    override suspend fun addNames(names: Collection<String>) {
         applicationContext.savedPlayerNamesDataStore.edit { preferences ->
             val current: MutableList<String> = parseBlob(raw = preferences[blobKey]).toMutableList()
             for (raw: String in names) {
@@ -43,7 +44,7 @@ class SavedPlayerNamesPreferencesRepository(
         }
     }
 
-    suspend fun removeName(displayName: String) {
+    override suspend fun removeName(displayName: String) {
         val target: String = displayName.trim()
         if (target.isEmpty()) {
             return
@@ -59,7 +60,7 @@ class SavedPlayerNamesPreferencesRepository(
     /**
      * Puts the matching saved name at the end of the list (most recently used last in UI order).
      */
-    suspend fun moveMatchingNameToEnd(displayName: String) {
+    override suspend fun moveMatchingNameToEnd(displayName: String) {
         val target: String = displayName.trim()
         if (target.isEmpty()) {
             return
