@@ -1,15 +1,34 @@
+# Gradle
+.gradle/
+build/
+
+# Kotlin
+.kotlin/
+
+# Local machine configuration
+local.properties
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
+
+# Android
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+
+# IDE (JetBrains / Android Studio)
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/shelf/
+.idea/deviceManager.xml
+.idea/deploymentTargetSelector.xml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and diagnostics
+*.log
+*.hprof

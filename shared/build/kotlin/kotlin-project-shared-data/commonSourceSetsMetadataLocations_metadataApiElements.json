@@ -1,8 +1,0 @@
-{
-  "locationBySourceSetName": {
-    "appleMain": "C:\\Users\\User\\AndroidStudioProjects\\Padlecano\\shared\\build\\classes\\kotlin\\metadata\\appleMain\\klib\\shared_appleMain",
-    "commonMain": "C:\\Users\\User\\AndroidStudioProjects\\Padlecano\\shared\\build\\classes\\kotlin\\metadata\\commonMain",
-    "iosMain": "C:\\Users\\User\\AndroidStudioProjects\\Padlecano\\shared\\build\\classes\\kotlin\\metadata\\iosMain\\klib\\shared_iosMain",
-    "nativeMain": "C:\\Users\\User\\AndroidStudioProjects\\Padlecano\\shared\\build\\classes\\kotlin\\metadata\\nativeMain\\klib\\shared_nativeMain"
-  }
-}
