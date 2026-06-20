@@ -23,4 +23,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Padlecano"
-include(":app")
+include(":shared")
+include(":composeApp")
+include(":androidApp")
+include(":webApp")
+include(":backend")

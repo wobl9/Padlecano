@@ -1,0 +1,12 @@
+abi_version=2.2.0
+builtins_platform=WASM
+compiler_version=2.2.10
+depends=Padlecano\:shared components.resources\:library org.jetbrains.compose.material3\:material3 org.jetbrains.compose.material\:material-ripple org.jetbrains.compose.foundation\:foundation org.jetbrains.compose.animation\:animation org.jetbrains.compose.foundation\:foundation-layout org.jetbrains.compose.ui\:ui org.jetbrains.compose.runtime\:runtime-saveable org.jetbrains.androidx.savedstate\:savedstate-compose org.jetbrains.compose.runtime\:runtime androidx.compose.runtime\:runtime-saveable androidx.compose.runtime\:runtime-annotation androidx.compose.runtime\:runtime-retain org.jetbrains.androidx.savedstate\:savedstate androidx.savedstate\:savedstate androidx.savedstate\:savedstate-compose androidx.compose.runtime\:runtime org.jetbrains.compose.animation\:animation-core org.jetbrains.androidx.lifecycle\:lifecycle-common androidx.lifecycle\:lifecycle-common org.jetbrains.kotlinx\:kotlinx-coroutines-core org.jetbrains.kotlinx\:kotlinx-browser androidx.annotation\:annotation org.jetbrains.kotlinx\:kotlinx-serialization-core kotlin org.jetbrains.compose.ui\:ui-text org.jetbrains.compose.ui\:ui-graphics org.jetbrains.compose.ui\:ui-unit org.jetbrains.kotlinx\:atomicfu org.jetbrains.skiko\:skiko androidx.graphics\:graphics-shapes org.jetbrains.compose.ui\:ui-geometry org.jetbrains.compose.ui\:ui-util
+ir_signature_versions=1,2
+jsOutputName=Padlecano-composeApp
+language_features=+JsAllowImplementingFunctionInterface +JsAllowValueClassesInExternals +MultiPlatformProjects
+metadata_version=1.4.1
+serializedIrFileFingerprints=2fr6oa1943lf2.31k2imiokbz07 h12jirun1an6.tabm6rblglzu 11nhh6ygi534m.2m80cevet4li 3e3d4voru4mtv.32wlu1kr6flum
+serializedKlibFingerprint=eabqlsemm1wm.3upzqw93j83bs
+unique_name=Padlecano\:composeApp
+wasm_targets=wasm-js
