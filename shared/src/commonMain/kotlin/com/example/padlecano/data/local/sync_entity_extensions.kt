@@ -1,22 +1,24 @@
 package com.example.padlecano.data.local
 
+import com.example.padlecano.database.Matches
+import com.example.padlecano.database.Tournaments
 import com.example.padlecano.domain.model.EntityId
 import com.example.padlecano.domain.model.SyncMetadata
 
-fun TournamentEntity.syncMetadata(): SyncMetadata {
+fun Tournaments.syncMetadata(): SyncMetadata {
     return SyncMetadata(
         ownerId = ownerId,
         updatedAt = updatedAt,
-        version = version,
+        version = version.toInt(),
         deletedAt = deletedAt,
     )
 }
 
-fun MatchEntity.syncMetadata(): SyncMetadata {
+fun Matches.syncMetadata(): SyncMetadata {
     return SyncMetadata(
         ownerId = ownerId,
         updatedAt = updatedAt,
-        version = version,
+        version = version.toInt(),
         deletedAt = deletedAt,
     )
 }

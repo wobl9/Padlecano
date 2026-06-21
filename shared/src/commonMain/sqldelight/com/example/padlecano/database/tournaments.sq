@@ -1,0 +1,57 @@
+CREATE TABLE tournaments (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    createdAtMillis INTEGER NOT NULL,
+    status TEXT NOT NULL,
+    tournamentType TEXT NOT NULL,
+    maxCombinedMatchScore INTEGER NOT NULL,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER
+);
+
+selectAllActive:
+SELECT *
+FROM tournaments
+WHERE deletedAt IS NULL
+ORDER BY createdAtMillis DESC;
+
+selectById:
+SELECT *
+FROM tournaments
+WHERE id = ?
+AND deletedAt IS NULL
+LIMIT 1;
+
+insertTournament:
+INSERT INTO tournaments(
+    id,
+    title,
+    createdAtMillis,
+    status,
+    tournamentType,
+    maxCombinedMatchScore,
+    ownerId,
+    updatedAt,
+    version,
+    deletedAt
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateTournamentStatus:
+UPDATE tournaments
+SET status = ?,
+    updatedAt = ?,
+    version = ?
+WHERE id = ?;
+
+softDeleteTournament:
+UPDATE tournaments
+SET deletedAt = ?,
+    updatedAt = ?,
+    version = ?
+WHERE id = ?;
+
+deleteAllTournaments:
+DELETE FROM tournaments;

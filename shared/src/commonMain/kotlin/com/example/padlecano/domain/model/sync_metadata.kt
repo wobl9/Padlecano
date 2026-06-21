@@ -1,5 +1,7 @@
 package com.example.padlecano.domain.model
 
+import kotlinx.datetime.Clock
+
 /**
  * Sync fields shared by all persistable entities.
  * Tournament is the sync aggregate; nested rows carry the same fields for future delta export.
@@ -11,9 +13,12 @@ data class SyncMetadata(
     val deletedAt: Long?,
 ) {
     companion object {
+        fun currentTimeMillis(): Long {
+            return Clock.System.now().toEpochMilliseconds()
+        }
         fun createNew(
             ownerId: EntityId? = null,
-            nowMillis: Long = System.currentTimeMillis(),
+            nowMillis: Long = currentTimeMillis(),
         ): SyncMetadata {
             return SyncMetadata(
                 ownerId = ownerId,
@@ -24,7 +29,7 @@ data class SyncMetadata(
         }
         fun bump(
             previous: SyncMetadata,
-            nowMillis: Long = System.currentTimeMillis(),
+            nowMillis: Long = currentTimeMillis(),
         ): SyncMetadata {
             return previous.copy(
                 updatedAt = nowMillis,
@@ -33,7 +38,7 @@ data class SyncMetadata(
         }
         fun markDeleted(
             previous: SyncMetadata,
-            nowMillis: Long = System.currentTimeMillis(),
+            nowMillis: Long = currentTimeMillis(),
         ): SyncMetadata {
             return previous.copy(
                 updatedAt = nowMillis,

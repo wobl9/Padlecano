@@ -1,0 +1,17 @@
+CREATE TABLE invitations (
+    id TEXT NOT NULL PRIMARY KEY,
+    tournamentId TEXT NOT NULL,
+    code TEXT NOT NULL,
+    invitedUserId TEXT,
+    status TEXT NOT NULL,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER,
+    FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE,
+    FOREIGN KEY (invitedUserId) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE INDEX invitations_tournamentId ON invitations(tournamentId);
+CREATE UNIQUE INDEX invitations_code ON invitations(code);
+CREATE INDEX invitations_invitedUserId ON invitations(invitedUserId);

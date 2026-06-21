@@ -1,0 +1,33 @@
+CREATE TABLE tournament_players (
+    id TEXT NOT NULL PRIMARY KEY,
+    tournamentId TEXT NOT NULL,
+    displayName TEXT NOT NULL,
+    sortOrder INTEGER NOT NULL,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER,
+    FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE
+);
+
+CREATE INDEX tournament_players_tournamentId ON tournament_players(tournamentId);
+
+selectByTournamentId:
+SELECT *
+FROM tournament_players
+WHERE tournamentId = ?
+AND deletedAt IS NULL
+ORDER BY sortOrder ASC;
+
+insertPlayer:
+INSERT INTO tournament_players(
+    id,
+    tournamentId,
+    displayName,
+    sortOrder,
+    ownerId,
+    updatedAt,
+    version,
+    deletedAt
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);

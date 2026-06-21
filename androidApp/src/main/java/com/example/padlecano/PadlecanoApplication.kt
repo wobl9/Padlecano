@@ -1,23 +1,22 @@
 package com.example.padlecano
 
 import android.app.Application
-import androidx.room.Room
-import com.example.padlecano.data.local.PadlecanoDatabase
+import com.example.padlecano.data.database.DatabaseDriverFactory
 import com.example.padlecano.data.preferences.SavedPlayerNamesPreferencesRepository
-import com.example.padlecano.data.repository.DefaultTournamentRepository
+import com.example.padlecano.data.repository.SqlDelightTournamentRepository
+import com.example.padlecano.database.PadlecanoDatabase
 import com.example.padlecano.domain.repository.SavedPlayerNamesRepository
 import com.example.padlecano.domain.repository.TournamentRepository
 
 class PadlecanoApplication : Application() {
-    private val database: PadlecanoDatabase by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            PadlecanoDatabase::class.java,
-            "padlecano.db",
-        ).fallbackToDestructiveMigration(dropAllTables = true).build()
+    private val databaseDriverFactory: DatabaseDriverFactory by lazy {
+        DatabaseDriverFactory(context = applicationContext)
+    }
+    private val padlecanoDatabase: PadlecanoDatabase by lazy {
+        PadlecanoDatabase(databaseDriverFactory.createDriver())
     }
     val tournamentRepository: TournamentRepository by lazy {
-        DefaultTournamentRepository(tournamentDao = database.tournamentDao())
+        SqlDelightTournamentRepository(database = padlecanoDatabase)
     }
     val savedPlayerNamesRepository: SavedPlayerNamesRepository by lazy {
         SavedPlayerNamesPreferencesRepository(applicationContext = applicationContext)

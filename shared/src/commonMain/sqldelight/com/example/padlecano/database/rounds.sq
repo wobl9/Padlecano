@@ -1,0 +1,38 @@
+CREATE TABLE rounds (
+    id TEXT NOT NULL PRIMARY KEY,
+    tournamentId TEXT NOT NULL,
+    roundNumber INTEGER NOT NULL,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER,
+    FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE
+);
+
+CREATE INDEX rounds_tournamentId ON rounds(tournamentId);
+
+selectByTournamentId:
+SELECT *
+FROM rounds
+WHERE tournamentId = ?
+AND deletedAt IS NULL
+ORDER BY roundNumber ASC;
+
+observeByTournamentId:
+SELECT *
+FROM rounds
+WHERE tournamentId = ?
+AND deletedAt IS NULL
+ORDER BY roundNumber ASC;
+
+insertRound:
+INSERT INTO rounds(
+    id,
+    tournamentId,
+    roundNumber,
+    ownerId,
+    updatedAt,
+    version,
+    deletedAt
+)
+VALUES (?, ?, ?, ?, ?, ?, ?);

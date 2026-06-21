@@ -1,0 +1,15 @@
+CREATE TABLE users (
+    id TEXT NOT NULL PRIMARY KEY,
+    yandexId TEXT,
+    handle TEXT,
+    email TEXT,
+    displayName TEXT NOT NULL,
+    rating REAL NOT NULL,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER
+);
+
+CREATE UNIQUE INDEX users_yandexId ON users(yandexId);
+CREATE UNIQUE INDEX users_handle ON users(handle);

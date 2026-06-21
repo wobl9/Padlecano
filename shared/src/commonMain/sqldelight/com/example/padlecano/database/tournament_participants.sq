@@ -1,0 +1,18 @@
+CREATE TABLE tournament_participants (
+    id TEXT NOT NULL PRIMARY KEY,
+    tournamentId TEXT NOT NULL,
+    userId TEXT NOT NULL,
+    slotIndex INTEGER NOT NULL,
+    role TEXT NOT NULL,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER,
+    FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX tournament_participants_tournamentId ON tournament_participants(tournamentId);
+CREATE INDEX tournament_participants_userId ON tournament_participants(userId);
+CREATE UNIQUE INDEX tournament_participants_tournament_user ON tournament_participants(tournamentId, userId);
+CREATE UNIQUE INDEX tournament_participants_tournament_slot ON tournament_participants(tournamentId, slotIndex);

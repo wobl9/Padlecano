@@ -1,0 +1,68 @@
+CREATE TABLE matches (
+    id TEXT NOT NULL PRIMARY KEY,
+    tournamentId TEXT NOT NULL,
+    roundId TEXT NOT NULL,
+    playerA1Index INTEGER NOT NULL,
+    playerA2Index INTEGER NOT NULL,
+    playerB1Index INTEGER NOT NULL,
+    playerB2Index INTEGER NOT NULL,
+    scoreA INTEGER NOT NULL DEFAULT 0,
+    scoreB INTEGER NOT NULL DEFAULT 0,
+    isScoreSet INTEGER NOT NULL DEFAULT 0,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER,
+    FOREIGN KEY (roundId) REFERENCES rounds(id) ON DELETE CASCADE,
+    FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE
+);
+
+CREATE INDEX matches_roundId ON matches(roundId);
+CREATE INDEX matches_tournamentId ON matches(tournamentId);
+
+selectByTournamentId:
+SELECT *
+FROM matches
+WHERE tournamentId = ?
+AND deletedAt IS NULL;
+
+selectById:
+SELECT *
+FROM matches
+WHERE id = ?
+AND deletedAt IS NULL
+LIMIT 1;
+
+observeByTournamentId:
+SELECT *
+FROM matches
+WHERE tournamentId = ?
+AND deletedAt IS NULL;
+
+insertMatch:
+INSERT INTO matches(
+    id,
+    tournamentId,
+    roundId,
+    playerA1Index,
+    playerA2Index,
+    playerB1Index,
+    playerB2Index,
+    scoreA,
+    scoreB,
+    isScoreSet,
+    ownerId,
+    updatedAt,
+    version,
+    deletedAt
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateMatchScore:
+UPDATE matches
+SET scoreA = ?,
+    scoreB = ?,
+    isScoreSet = 1,
+    updatedAt = ?,
+    version = ?
+WHERE id = ?;

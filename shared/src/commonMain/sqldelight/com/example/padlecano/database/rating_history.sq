@@ -1,0 +1,17 @@
+CREATE TABLE rating_history (
+    id TEXT NOT NULL PRIMARY KEY,
+    userId TEXT NOT NULL,
+    tournamentId TEXT NOT NULL,
+    ratingBefore REAL NOT NULL,
+    ratingAfter REAL NOT NULL,
+    createdAtMillis INTEGER NOT NULL,
+    ownerId TEXT,
+    updatedAt INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    deletedAt INTEGER,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE
+);
+
+CREATE INDEX rating_history_userId ON rating_history(userId);
+CREATE INDEX rating_history_tournamentId ON rating_history(tournamentId);
